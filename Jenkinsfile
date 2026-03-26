@@ -14,6 +14,11 @@ pipeline {
             }
         }
 
+        stage("Show images"){
+            steps{
+                sh 'docker images'
+            }
+        }
 
 
         stage('Stop Old Container') {
