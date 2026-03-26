@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "sameedimad/node-calculator:v1"
+        CONTAINER_NAME = "calc-container"
+    }
+
+    stages {
+
+        stage('Build Image') {
+            steps {
+                sh 'docker build -t $DOCKER_IMAGE .'
+            }
+        }
+
+
+
+        stage('Stop Old Container') {
+            steps {
+                sh '''
+                docker stop $CONTAINER_NAME || true
+                docker rm $CONTAINER_NAME || true
+                '''
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh '''
+                docker run -d -p 3000:3000 --name $CONTAINER_NAME $DOCKER_IMAGE
+                '''
+            }
+        }
+    }
+}
